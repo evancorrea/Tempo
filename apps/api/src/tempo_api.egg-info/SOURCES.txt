@@ -11,7 +11,10 @@ src/tempo/routes/__init__.py
 src/tempo/routes/papers.py
 src/tempo/services/__init__.py
 src/tempo/services/extraction.py
+src/tempo/services/ocr.py
 src/tempo/services/pdf_validation.py
+src/tempo/services/quality.py
+src/tempo/services/rendering.py
 src/tempo/services/storage.py
 src/tempo/services/stub_analysis.py
 src/tempo_api.egg-info/PKG-INFO

@@ -37,7 +37,7 @@ export function PaperWorkspace({ initial }: { initial: Paper }) {
   const selectedClaim = claims.find(claim => claim.evidenceSpanIds.includes(selected ?? ""));
 
   return <main className="workspace">
-    <header><span>{current.filename}</span><span className={current.status}>{current.status} · {current.progress}%</span></header>
+    <header><span>{current.filename}</span><span className={current.status}>{current.status} · {current.progress}%{current.ocrPageCount > 0 && <span className="ocr-status"> · OCR used on {current.ocrPageCount} page{current.ocrPageCount === 1 ? "" : "s"}</span>}</span></header>
     {current.failure && <p role="alert">{current.failure.message}</p>}
     <div className="columns">
       <PdfViewer url={apiUrl(`/api/papers/${current.paperId}/file`)} evidence={evidence} onSelect={setSelected} />

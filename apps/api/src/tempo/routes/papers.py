@@ -12,9 +12,11 @@ from tempo.schemas import AnnotationResponse, BriefResponse, Failure, PaperRespo
 router = APIRouter(prefix="/api/papers", tags=["papers"])
 
 
-def _paper_response(record: dict) -> PaperResponse:
+def _paper_response(record: dict, db=None) -> PaperResponse:
     failure = Failure(code=record["error_code"], message=record["error_message"]) if record["error_code"] else None
-    return PaperResponse(paperId=record["id"], filename=record["filename"], status=record["status"], stage=record["stage"], progress=record["progress"], pageCount=record["page_count"], failure=failure)
+    extraction = db.get_artifact(record["id"], "extraction") if db else None
+    ocr_page_count = sum(item.get("ocrApplied", False) for item in extraction.get("quality", [])) if extraction else 0
+    return PaperResponse(paperId=record["id"], filename=record["filename"], status=record["status"], stage=record["stage"], progress=record["progress"], pageCount=record["page_count"], ocrPageCount=ocr_page_count, failure=failure)
 
 
 def _paper_or_404(request: Request, paper_id: str) -> dict:
@@ -34,18 +36,18 @@ async def upload_paper(request: Request, file: UploadFile) -> PaperResponse:
     digest = hashlib.sha256(content).hexdigest()
     existing = request.app.state.db.get_by_hash(digest)
     if existing:
-        return _paper_response(existing)
+        return _paper_response(existing, request.app.state.db)
     paper_id = str(uuid.uuid4())
     path: Path = request.app.state.storage.original_path(paper_id)
     path.write_bytes(content)
     record = request.app.state.db.create_paper(paper_id, Path(file.filename).name, digest)
     request.app.state.runner.submit(paper_id, request.app.state.settings)
-    return _paper_response(record)
+    return _paper_response(record, request.app.state.db)
 
 
 @router.get("/{paper_id}", response_model=PaperResponse)
 def get_paper(request: Request, paper_id: str) -> PaperResponse:
-    return _paper_response(_paper_or_404(request, paper_id))
+    return _paper_response(_paper_or_404(request, paper_id), request.app.state.db)
 
 
 @router.get("/{paper_id}/file")

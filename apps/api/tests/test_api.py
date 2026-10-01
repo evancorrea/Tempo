@@ -25,4 +25,5 @@ def test_upload_processes_and_exports_grounded_annotation(tmp_path):
         assert status["status"] == "ready"
         annotations = client.get(f"/api/papers/{paper_id}/annotations").json()
         assert annotations["claims"][0]["evidenceSpanIds"] == [annotations["evidenceSpans"][0]["id"]]
+        assert status["ocrPageCount"] == 0
         assert client.get(f"/api/papers/{paper_id}/brief.md").status_code == 200

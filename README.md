@@ -24,6 +24,14 @@ Tempo is a local-first web app for turning a technical-paper PDF into an evidenc
 
 Open http://localhost:3000 and upload a native-text PDF.
 
+For scanned or image-only pages, install the local Tesseract executable before starting the API. On macOS with Homebrew:
+
+```sh
+brew install tesseract
+```
+
+If OCR is required but Tesseract is unavailable, Tempo reports a safe processing error rather than returning ungrounded text.
+
 ## Plan review and intentional scope
 
 The implementation follows Milestone 1 of `IMPLEMENTATION_PLAN.md`, which explicitly calls for the smallest complete vertical slice before OCR, segmentation, real model calls, synthesis, and optional GitHub enrichment. Its deterministic stub derives an evidence quote only from a stored extracted block and renders geometry only produced by the extractor; it never presents model-generated coordinates as evidence.

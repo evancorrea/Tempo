@@ -9,6 +9,7 @@ input { display: none; }
 header { display: flex; justify-content: space-between; margin-bottom: 14px; font-weight: 650; }
 .ready { color: #147241; }
 .failed { color: #b42318; }
+.ocr-status { color: #775500; }
 .columns { display: grid; grid-template-columns: minmax(500px, 3fr) minmax(280px, 1fr); gap: 18px; align-items: start; }
 .pdf { min-height: 620px; padding: 16px; overflow: auto; background: #dce2e8; }
 .page { position: relative; width: 720px; margin: 0 auto 16px; box-shadow: 0 2px 9px #0003; }

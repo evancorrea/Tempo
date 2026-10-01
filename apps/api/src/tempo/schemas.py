@@ -19,6 +19,7 @@ class PaperResponse(BaseModel):
     stage: str
     progress: int = Field(ge=0, le=100)
     pageCount: int | None = None
+    ocrPageCount: int = Field(default=0, ge=0)
     failure: Failure | None = None
 
 
