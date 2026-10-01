@@ -1,0 +1,13 @@
+.env
+.env.local
+data/
+*.db
+*.sqlite
+__pycache__/
+.pytest_cache/
+.venv/
+node_modules/
+.next/
+coverage/
+
+IMPLEMENTATION_PLAN.md
